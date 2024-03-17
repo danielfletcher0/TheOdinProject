@@ -45,27 +45,67 @@ function playRound(playerChoice, computerSelection) {
     }
 }
 
-function playGame() {
-    let playerScore = 0;
-    let computerScore = 0;
+function playGame(user_choice) {
 
-    for (let round = 1; round <= 5; round++) {
-        let user_choice = prompt("Choose your attack! Rock, Paper, or Scissors");
-        let result = playRound(user_choice, getComputerChoice())
-        console.log(result);
-        playerScore += result.includes("Win");
-        computerScore += result.includes("Lose");
+    let result = playRound(user_choice, getComputerChoice())
+
+    playerScore += result.includes("Win");
+    computerScore += result.includes("Lose");
+    displayScore.textContent = `Player: ${playerScore}, Computer: ${computerScore}`
+
+    resultP.appendChild(displayScore);
+    rounds++;
+
+    if (rounds >= 5) {
+        rounds = 0;
+        let returnStatement = ""
+        if (playerScore > computerScore) {
+            returnStatement = `You Won! Player: ${playerScore}, Computer: ${computerScore}`;
+        }
+        else if (playerScore < computerScore) {
+            returnStatement = `You Lost! Player: ${playerScore}, Computer: ${computerScore}`;
+        }
+        else {
+            returnStatement = `It's a tie! Player: ${playerScore}, Computer: ${computerScore}`;
+        }
+        playerScore = 0;
+        computerScore = 0;
+        return returnStatement;
     }
 
-    if (playerScore > computerScore) {
-        return `You Won! Player: ${playerScore}, Computer: ${computerScore}`;
-    }
-    else if (playerScore < computerScore) {
-        return `You Lost! Player: ${playerScore}, Computer: ${computerScore}`;
-    }
-    else {
-        return `It's a tie! Player: ${playerScore}, Computer: ${computerScore}`;
-    }
 }
 
-console.log(playGame());
+
+
+let userSelection = "";
+let playerScore = 0;
+let computerScore = 0;
+const resultP = document.querySelector("#results");
+const rockBtn = document.querySelector("#rock")
+const displayScore = document.createElement("p")
+const result = document.createElement('p');
+let rounds = 0;
+
+/*Lots of duplicate code for displaying the score and final result
+* There has to be a more optimal approach...
+* Will return later to reformat*/
+rockBtn.addEventListener("click",() => {
+    userSelection = "rock";
+    result.textContent = playGame(userSelection);
+    resultP.appendChild(result);
+});
+
+const paperBtn = document.querySelector("#paper");
+paperBtn.addEventListener("click", ()=> {
+    userSelection = "paper";
+    result.textContent = playGame(userSelection);
+    resultP.appendChild(result);
+})
+
+const scissorsBtn = document.querySelector("#scissors");
+scissorsBtn.addEventListener("click", ()=> {
+    userSelection = "scissors";
+    result.textContent = playGame(userSelection);
+    resultP.appendChild(result);
+})
+
